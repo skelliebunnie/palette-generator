@@ -1,0 +1,40 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Palette Generator</title>
+	<script src="https://kit.fontawesome.com/adc1a4d4e8.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header>
+	<form method="POST" action="" id="color-form">
+		<div class="hidden-submit"><input type="submit" tabindex="-1"/></div>
+	</form>
+	<i class="fa-solid fa-square-plus fa-2x add-color-input"></i>	
+
+</header>
+<main id="content"></main>
+
+<!-- color input template -->
+<template id="inputsTemplate">
+	<div class="color-inputs">
+		<i class="fa-solid fa-xmark delete-inputs"></i>
+		<input type="text" name="color-name" placeholder="primary">
+		<input type="color" name="color-value" value="#00ffff">
+	</div>
+</template>
+
+<!-- palette template -->
+<template id="paletteTemplate">
+	<article class="palette">
+		<h4 class="title"></h4>
+		<ul class="colors"></ul>
+	</article>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js" integrity="sha512-UNM1njAgOFUa74Z0bADwAq8gbTcqZC8Ej4xPSzpnh0l6KMevwvkBvbldF9uR++qKeJ+MOZHRjV1HZjoRvjDfNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="js/colorFunctions.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
