@@ -19,16 +19,20 @@ header {
 	flex-flow: row nowrap;
 	justify-content: space-between;
 	align-items: center;
+	position: relative;
 }
 
 header form {
 	display: flex;
 	flex-flow: row wrap;
+	justify-content: space-evenly;
 	gap: 0.5rem;
 }
 
-header form .color-inputs {
-
+header > div {
+	display: flex;
+	flex-flow: row wrap;
+	gap: 1.5rem;
 }
 
 form input[type="text"] {
@@ -89,6 +93,142 @@ main {
 	padding: 0;
 }
 
+.text-dark { color: #030303; }
+.text-light { color: #fefefe; }
+
+.hidden-submit {
+  border: 0 none;
+  height: 0;
+  width: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Add a new set of inputs for a new color */
+.add-color-input {
+	color: #D4D864;
+	cursor: pointer;
+	padding: 5px 2px 1px;
+	line-height: 0.85;
+	box-sizing: border-box;
+	border-radius: 0.25rem;
+	transition: all 0.3s ease-in-out;
+}
+
+.add-color-input:hover,
+.add-color-input:focus {
+	color: #5e8b41;
+	background-color: #eee;
+	transition: all 0.3s ease-in-out;
+}
+
+/* delete the inputs & associated palette color */
+.delete-inputs {
+	color: white;
+	font-size: 1.45rem;
+	display: inline-block;
+	position: relative;
+	cursor: pointer;
+	padding: 0.2rem 0.75rem 0.2rem 0.6rem;
+	margin: 0;
+	border: 4px solid black;
+	border-right: 0;
+	right: -8px;
+	bottom: 1px;
+	z-index: 10;
+	background-color: #EF6F6C;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.delete-inputs:hover,
+.delete-inputs:focus {
+	background-color: #A40606;
+	transition: background-color 0.3s ease-in-out;
+}
+
+/* The "swatchbook" */
+.swatchbook {
+	color: white;
+	cursor: pointer;
+}
+
+.swatchbook-container {
+	display: none;
+	background-color: white;
+	padding: 1rem 2rem;
+}
+
+.swatchbook-container.active {
+	display: block;
+	position: absolute;
+	right: 1rem;
+	top: 95%;
+}
+
+.swatchbook-container.active:before {
+	content: "";
+	position: absolute;
+	right: 7%;
+	top: initial;
+	margin-top: initial;
+	bottom: 100%;
+	margin-top: -3px;
+	border: 10px solid transparent;
+	border-bottom-color: white;
+}
+
+.swatchbook-select {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	padding: 0.5rem;
+	gap: 4px;
+}
+
+.swatch {
+	position: relative;
+	height: 4rem;
+	width: 4rem;
+	flex: 0;
+}
+
+.swatch:hover:before {
+	content: attr(data-name);
+	position: absolute;
+	background-color: black;
+	color: white;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: x-small;
+	padding: 2px 4px;
+}
+
+.page-nav .nav {
+	cursor: pointer;
+	padding: 0.2rem 1rem;
+	box-sizing: border-box;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.page-nav .nav:not(.inactive):hover,
+.page-nav .nav:not(.inactive):focus {
+	background-color: #ecceee;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.page-nav .nav:nth-child(2) { padding-right: 1rem; }
+.page-nav .nav:nth-child(3) { padding-left: 1rem; }
+
+.page-nav .nav.inactive {
+	cursor: default;
+	color: #999;
+}
+
+/* A "palette" is a group of shades (50 - 900) of a single color */
 .palette {
 	flex: 1 0 auto;
 	text-align: center;
@@ -114,43 +254,4 @@ main {
 	flex: 1;
 	padding: 0.5rem 1.5rem;
 	font-size: large;
-}
-
-.text-dark { color: #030303; }
-.text-light { color: #fefefe; }
-
-.hidden-submit {
-  border: 0 none;
-  height: 0;
-  width: 0;
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-}
-
-.add-color-input {
-	color: #9EB535;
-}
-
-.delete-inputs {
-	color: white;
-	font-size: 1.45rem;
-	display: inline-block;
-	position: relative;
-	cursor: pointer;
-	padding: 0.2rem 0.75rem 0.2rem 0.6rem;
-	margin: 0;
-	border: 4px solid black;
-	border-right: 0;
-	right: -8px;
-	bottom: 1px;
-	z-index: 10;
-	background-color: #EF6F6C;
-	transition: background-color 0.3s ease-in-out;
-}
-
-.delete-inputs:hover,
-.delete-inputs:focus {
-	background-color: #A40606;
-	transition: background-color 0.3s ease-in-out;
 }

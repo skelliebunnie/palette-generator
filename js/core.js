@@ -1,7 +1,6 @@
 const form = document.querySelector("#color-form");
 const contentContainer = document.querySelector("#content");
 
-let colorNamesList = getColorNamesList();
 let colors = getColors();
 let palette = {};
 
@@ -14,17 +13,9 @@ form.addEventListener('submit', function(e) {
 	displayPalette();
 });
 
-if(!form.querySelector("input[type='text']")) addInput();
-
 document.querySelector(".add-color-input").addEventListener('click', function() {
 	addInput();
 })
-
-displayPalette();
-
-async function getColorNamesList() {
-	return await (await fetch("https://api.color.pizza/v1/?noduplicates=true")).json();
-}
 
 function getColors() {
 	let inputs = form.querySelectorAll("input"),
@@ -126,19 +117,16 @@ function addInput() {
 		removeInputAndPalette(inputId);
 	});
 
-	colorNamesList.then(res => {
-		const list = res.colors;
-		let idx = Math.floor(Math.random() * list.length);
+	let idx = Math.floor(Math.random() * namedColors.length);
 
-		form.append(inputsContainer);
+	form.append(inputsContainer);
 
-		colorNameInput.value = list[idx].name;
-		colorValueInput.value = list[idx].hex;
+	colorNameInput.value = namedColors[idx].name;
+	colorValueInput.value = namedColors[idx].hex;
 
-		colors.push({name: list[idx].name, hex: list[idx].hex, id: inputId});
-		palette = generatePalette(colors);
-		displayPalette();
-	});
+	colors.push({name: namedColors[idx].name, hex: namedColors[idx].hex, id: inputId});
+	palette = generatePalette(colors);
+	displayPalette();
 }
 
 function removeInputAndPalette(targetId) {

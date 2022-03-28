@@ -11,8 +11,30 @@
 	<form method="POST" action="" id="color-form">
 		<div class="hidden-submit"><input type="submit" tabindex="-1"/></div>
 	</form>
-	<i class="fa-solid fa-square-plus fa-2x add-color-input"></i>	
-
+	<div style="position: relative;">
+		<i class="fa-solid fa-square-plus fa-2x add-color-input"></i>
+		<i class="fa-solid fa-swatchbook fa-2x swatchbook-toggle"></i>
+	</div>
+	<article class="swatchbook-container">
+		<!-- TODO: ul list of "color groups" (e.g. red, orange, yellow, etc.) to choose from to "filter" the swatchbook -->
+		<ul class="swatchbook-list"></ul>
+		<section class="page-nav">
+			<span class="nav nav-first inactive" data-target="1">
+				<i class="fa-solid fa-angles-left"></i>
+			</span>
+			<span class="nav nav-prev inactive" data-target="1">
+				<i class="fa-solid fa-angle-left"></i>
+			</span>
+			<span class="current-page">1</span> / <span class="total-pages">1</span>
+			<span class="nav nav-next inactive" data-target="1">
+				<i class="fa-solid fa-angle-right"></i>
+			</span>
+			<span class="nav nav-last inactive" data-target="1">
+				<i class="fa-solid fa-angles-right"></i>
+			</span>
+			
+		</section>
+	</article>
 </header>
 <main id="content"></main>
 
@@ -35,6 +57,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js" integrity="sha512-UNM1njAgOFUa74Z0bADwAq8gbTcqZC8Ej4xPSzpnh0l6KMevwvkBvbldF9uR++qKeJ+MOZHRjV1HZjoRvjDfNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="js/colorFunctions.js"></script>
-<script src="js/script.js"></script>
+<script src="js/colorNames.js"></script>
+<script src="js/core.js"></script>
 </body>
 </html>
