@@ -29,16 +29,14 @@ function hue2rgb(p, q, t) {
   return p;
 };
 
-function rgbToHSL(r,g,b) {
+function rgb2hsl(r,g,b) {
 	r /= 255;
   g /= 255;
   b /= 255;
   // (r /= 255), (g /= 255), (b /= 255);
   var max = Math.max(r, g, b),
     min = Math.min(r, g, b);
-  var h,
-    s,
-    l = (max + min) / 2;
+  var h, s, l = (max + min) / 2;
 
   if (max === min) {
     h = s = 0; // achromatic
@@ -65,7 +63,55 @@ function rgbToHSL(r,g,b) {
   return [h, s, l];
 }
 
-function hslToRGB(h, s, l) {
+function rgb2hsv(r,g,b) {
+    let rabs, gabs, babs, rr, gg, bb, h, s, v, diff, diffc, percentRoundFn;
+    rabs = r / 255;
+    gabs = g / 255;
+    babs = b / 255;
+    v = Math.max(rabs, gabs, babs),
+    diff = v - Math.min(rabs, gabs, babs);
+    diffc = c => (v - c) / 6 / diff + 1 / 2;
+    percentRoundFn = num => Math.round(num * 100) / 100;
+    if (diff == 0) {
+        h = s = 0;
+    } else {
+        s = diff / v;
+        rr = diffc(rabs);
+        gg = diffc(gabs);
+        bb = diffc(babs);
+
+        if (rabs === v) {
+            h = bb - gg;
+        } else if (gabs === v) {
+            h = (1 / 3) + rr - bb;
+        } else if (babs === v) {
+            h = (2 / 3) + gg - rr;
+        }
+        if (h < 0) {
+            h += 1;
+        }else if (h > 1) {
+            h -= 1;
+        }
+    }
+    return {
+        h: Math.round(h * 360),
+        s: percentRoundFn(s * 100),
+        v: percentRoundFn(v * 100)
+    };
+}
+
+function rgb2hex(r,g,b) {
+	r = Math.round(r);
+  g = Math.round(g);
+  b = Math.round(b);
+
+  return `#${r.toString(16).toUpperCase().padStart(2, "0")}${g
+    .toString(16)
+    .toUpperCase()
+    .padStart(2, "0")}${b.toString(16).toUpperCase().padStart(2, "0")}`;
+}
+
+function hsl2rgb(h, s, l) {
   let r, g, b;
 
   if (s === 0) {
@@ -81,7 +127,7 @@ function hslToRGB(h, s, l) {
   return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
 
-function hexToRGB(hex) {
+function hex2rgb(hex) {
 	if(hex === undefined) return [0,0,0];
 	hex = hex.toString().replace("#", "");
 
@@ -97,33 +143,55 @@ function hexToRGB(hex) {
   ];
 }
 
-function rgbToHex(r,g,b) {
-	r = Math.round(r);
-  g = Math.round(g);
-  b = Math.round(b);
-
-  return `#${r.toString(16).toUpperCase().padStart(2, "0")}${g
-    .toString(16)
-    .toUpperCase()
-    .padStart(2, "0")}${b.toString(16).toUpperCase().padStart(2, "0")}`;
+function hex2hsl(hex) {
+	const rgb = hex2rgb(hex);
+  return rgb2hsl(rgb[0], rgb[1], rgb[2]);
 }
 
-function hexToHSL(hex) {
-	const rgb = hexToRGB(hex);
-  return rgbToHSL(rgb[0], rgb[1], rgb[2]);
+function clusterColors(clusters,colors) {
+	let neutrals = colors.filter(color => color.hsl.s <= 1 || color.hsl.l >= 99);
+	neutrals = neutrals.map(color => ({...color, cluster: 'neutral'}))
+
+	colors = colors.filter(color => !neutrals.includes(color));
+
+	clusters.forEach((cluster, index) => {
+		if(!['neutral','black','white','grey'].includes(cluster.name)) {
+			let startHue = rgb2hsl(...cluster.leadColor)[0] * 360;
+			let endHue = clusters[index + 1] ? rgb2hsl(...clusters[index + 1].leadColor)[0] * 360 : 360;
+			if(endHue === 0) endHue = 360;
+
+			if(startHue > endHue) {
+				cluster.colors = colors.filter(color => (color.hsl.h >= startHue && color.hsl.h <= 0) || (color.hsl.h >= 0 && color.hsl.h <= endHue));
+
+			} else {
+				cluster.colors = colors.filter(color => color.hsl.h >= startHue && color.hsl.h <= endHue);
+			}
+			
+			colors = colors.filter(color => !cluster.colors.includes(color));
+			cluster.colors = cluster.colors.map(color => ({...color, cluster: cluster.name}));
+
+		} else {
+			cluster.colors = neutrals;
+		}
+
+		cluster.colors.sort((a,b) => { return b.hsl.l - a.hsl.l });
+	});
+
+	if(clusters[0].colors.length > 0) return clusters;
+	return colors;
 }
 
 function matchColor(hex, compHex) {
-	const HSL = hexToHSL(hex);
-  const compHSL = hexToHSL(compHex);
+	const HSL = hex2hsl(hex);
+  const compHSL = hex2hsl(compHex);
 
-  const newRGB = hslToRGB(HSL[0], HSL[1], compHSL[2]);
+  const newRGB = hsl2rgb(HSL[0], HSL[1], compHSL[2]);
 
-  return rgbToHex(newRGB[0], newRGB[1], newRGB[2]);
+  return rgb2hex(newRGB[0], newRGB[1], newRGB[2]);
 }
 
 function getContrast(hex) {
-	let rgb = hexToRGB(hex);
+	let rgb = hex2rgb(hex);
 
 	const brightness = Math.round(
 			((parseInt(rgb[0]) * 299) +
@@ -141,7 +209,7 @@ function getContrast(hex) {
 }
 
 function luminance(hex) {
-	const rgb = hexToRGB(hex);
+	const rgb = hex2rgb(hex);
 	let srgbR = rgb[0] / 255,
 			srgbG = rgb[1] / 255,
 			srgbB = rgb[2] / 255;
@@ -149,7 +217,7 @@ function luminance(hex) {
 	let R = srgbR <= 0.04045 ? srgbR / 12.92 : Math.pow((srgbR + 0.055) / 1.055, 2.4);
 	let G = srgbG <= 0.04045 ? srgbG / 12.92 : Math.pow((srgbG + 0.055) / 1.055, 2.4);
 	let B = srgbB <= 0.04045 ? srgbB / 12.92 : Math.pow((srgbB + 0.055) / 1.055, 2.4);
-	console.log(rgb,R,G,B);
+	// console.log(rgb,R,G,B);
 
 	const L = 0.2126 * R + G + 0.0722 * B;
 }
@@ -204,15 +272,3 @@ function generatePalette(inputColors=[], inputShades=[]) {
 
 	return palette;
 }
-
-// module.exports = {
-// 	defaults,
-// 	hue2rgb,
-// 	rgbToHSL,
-// 	hslToRGB,
-// 	hexToRGB,
-// 	rgbToHex,
-// 	hexToHSL,
-// 	matchColor,
-// 	generatePalette
-// }

@@ -2,34 +2,36 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Palette Generator</title>
+	<title>Swatchbook</title>
 	<script src="https://kit.fontawesome.com/adc1a4d4e8.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<header>
-	<form method="POST" action="" id="color-form">
-		<div class="hidden-submit"><input type="submit" tabindex="-1"/></div>
-	</form>
-	<div style="position: relative;">
-		<i class="fa-solid fa-square-plus fa-2x add-color-input"></i>
-		<i class="fa-solid fa-swatchbook fa-2x swatchbook-toggle"></i>
-	</div>
-	<article class="swatchbook-container active">
-		<!-- TODO: ul list of "color groups" (e.g. red, orange, yellow, etc.) to choose from to "filter" the swatchbook -->
+	<main class="swatchbook-container page" data-count="2000" data-cols="100">
 		<ul id="swatch-clusters" data-filter="none">
-			<li class="cluster" data-name="red" data-lead="[255,0,0]"></li>
+			<li class="cluster" data-name="red" data-lead="[255,0,50]"></li>
+			<li class="cluster" data-name="green" data-lead="[230,255,0]"></li>
+			<li class="cluster" data-name="blue" data-lead="[0,255,200]"></li>
+			<li class="cluster" data-name="violet" data-lead="[75,0,255]"></li>
+			<li class="cluster" data-name="neutral" data-lead="[255,255,255]"></li>
+			<!-- <li class="cluster" data-name="red" data-lead="[255,0,0]"></li>
 			<li class="cluster" data-name="orange" data-lead="[255,128,0]"></li>
 			<li class="cluster" data-name="yellow" data-lead="[255,255,0]"></li>
-			<li class="cluster" data-name="green" data-lead="[128,255,0]"></li>
+			<li class="cluster" data-name="chartreuse" data-lead="[128,255,0]"></li>
+			<li class="cluster" data-name="green" data-lead="[0,255,0]"></li>
+			<li class="cluster" data-name="spring green" data-lead="[0,255,128]"></li>
 			<li class="cluster" data-name="cyan" data-lead="[0,255,255]"></li>
+			<li class="cluster" data-name="azure" data-lead="[0,127,255]"></li>
 			<li class="cluster" data-name="blue" data-lead="[0,0,255]"></li>
 			<li class="cluster" data-name="violet" data-lead="[127,0,255]"></li>
 			<li class="cluster" data-name="magenta" data-lead="[255,0,255]"></li>
-			<li class="cluster" data-name="neutral" data-lead="[255,255,255]"></li>
+			<li class="cluster" data-name="rose" data-lead="[255,0,128]"></li>
+			<li class="cluster" data-name="black" data-lead="[0,0,0]"></li>
+			<li class="cluster" data-name="grey" data-lead="[235,235,235]"></li>
+			<li class="cluster" data-name="white" data-lead="[255,255,255]"></li> -->
 		</ul>
 		<ul id="swatchbook-list"></ul>
-		<section class="page-nav">
+		<div class="page-nav">
 			<span class="nav nav-first inactive" data-target="1">
 				<i class="fa-solid fa-angles-left"></i>
 			</span>
@@ -43,28 +45,8 @@
 			<span class="nav nav-last inactive" data-target="1">
 				<i class="fa-solid fa-angles-right"></i>
 			</span>
-			
-		</section>
-	</article>
-</header>
-<main id="content"></main>
-
-<!-- color input template -->
-<template id="inputsTemplate">
-	<div class="color-inputs">
-		<i class="fa-solid fa-xmark delete-inputs"></i>
-		<input type="text" name="color-name" placeholder="primary">
-		<input type="color" name="color-value" value="#00ffff">
-	</div>
-</template>
-
-<!-- palette template -->
-<template id="paletteTemplate">
-	<article class="palette">
-		<h4 class="title"></h4>
-		<ul class="colors"></ul>
-	</article>
-</template>
+		</div>
+	</main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js" integrity="sha512-UNM1njAgOFUa74Z0bADwAq8gbTcqZC8Ej4xPSzpnh0l6KMevwvkBvbldF9uR++qKeJ+MOZHRjV1HZjoRvjDfNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="js/colorFunctions.js"></script>

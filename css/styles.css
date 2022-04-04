@@ -105,6 +105,8 @@ main {
   overflow: hidden;
 }
 
+.hidden { display: none; }
+
 /* Add a new set of inputs for a new color */
 .add-color-input {
 	color: #D4D864;
@@ -148,7 +150,7 @@ main {
 }
 
 /* The "swatchbook" */
-.swatchbook {
+.swatchbook-toggle {
 	color: white;
 	cursor: pointer;
 }
@@ -166,6 +168,12 @@ main {
 	top: 95%;
 }
 
+.swatchbook-container.page {
+	display: block;
+	max-width: 100vw !important;
+	padding: 0;
+}
+
 .swatchbook-container.active:before {
 	content: "";
 	position: absolute;
@@ -178,20 +186,43 @@ main {
 	border-bottom-color: white;
 }
 
-.swatchbook-select {
+#swatch-clusters {
+	list-style-type: none;
+	margin: 0 auto;
+	display: grid;
+	padding: 0.5rem;
+	gap: 4px;
+	grid-template-columns: repeat(9, 1fr);
+	justify-content: center;
+	text-align: center;
+}
+
+.cluster {
+	border: 1px solid black;
+	display: inline-block;
+	margin: 0 auto;
+	cursor: pointer;
+}
+
+#swatchbook-list {
 	list-style-type: none;
 	margin: 0;
-	padding: 0;
 	display: grid;
-	grid-template-columns: repeat(5, 1fr);
 	padding: 0.5rem;
 	gap: 4px;
 }
 
+#swatchbook-list li { margin: 0 auto; text-align: center; }
+
+.swatchbook-container.page #swatchbook-list {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: start;
+}
+
+.cluster,
 .swatch {
 	position: relative;
-	height: 4rem;
-	width: 4rem;
 	flex: 0;
 }
 
@@ -205,6 +236,13 @@ main {
 	transform: translate(-50%, -50%);
 	font-size: x-small;
 	padding: 2px 4px;
+}
+
+.swatchbook-container.page .page-nav {
+	margin: 0 auto;
+	text-align: center;
+	font-size: x-large;
+	margin: 2rem 0;
 }
 
 .page-nav .nav {

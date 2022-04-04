@@ -1,21 +1,23 @@
 const form = document.querySelector("#color-form");
 const contentContainer = document.querySelector("#content");
 
-let colors = getColors();
+let colors = form ? getColors() : namedColors[0];
 let palette = {};
 
 let paletteTemplate = document.querySelector("#paletteTemplate");
 let inputsTemplate = document.querySelector("#inputsTemplate");
 
-form.addEventListener('submit', function(e) {
-	e.preventDefault();
+if(form) {
+	form.addEventListener('submit', function(e) {
+		e.preventDefault();
 
-	displayPalette();
-});
+		displayPalette();
+	});
 
-document.querySelector(".add-color-input").addEventListener('click', function() {
-	addInput();
-})
+	document.querySelector(".add-color-input").addEventListener('click', function() {
+		addInput();
+	});
+}
 
 function getColors() {
 	let inputs = form.querySelectorAll("input"),
@@ -33,7 +35,6 @@ function getColors() {
 }
 
 function displayPalette() {
-
 	contentContainer.innerHTML = "";
 	let colorNames = Object.keys(palette);
 
@@ -99,7 +100,16 @@ function updatePalette() {
 }
 
 function addInput() {
-	const inputId = uuid.v4();
+	let inputId = Math.floor(Math.random() * 200);
+	let inputUUID;
+
+	try {
+		inputUUID = uuid.v4();
+
+		if(inputUUID !== undefined && inputUUID !== null) inputId = inputUUID;
+	} catch {
+		console.log("UUID could not be generated - using Math.random()");
+	}
 
 	let templateClone = inputsTemplate.content.cloneNode(true);
 	let inputsContainer = templateClone.querySelector(".color-inputs");
@@ -117,14 +127,14 @@ function addInput() {
 		removeInputAndPalette(inputId);
 	});
 
-	let idx = Math.floor(Math.random() * namedColors.length);
+	let randomColorIndex = Math.floor(Math.random() * namedColors.length);
 
 	form.append(inputsContainer);
 
-	colorNameInput.value = namedColors[idx].name;
-	colorValueInput.value = namedColors[idx].hex;
+	colorNameInput.value = namedColors[randomColorIndex].name;
+	colorValueInput.value = namedColors[randomColorIndex].hex;
 
-	colors.push({name: namedColors[idx].name, hex: namedColors[idx].hex, id: inputId});
+	colors.push({name: namedColors[randomColorIndex].name, hex: namedColors[randomColorIndex].hex, id: inputId});
 	palette = generatePalette(colors);
 	displayPalette();
 }
